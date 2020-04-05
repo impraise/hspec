@@ -1,0 +1,4 @@
+/dist
+/config/*
+!/config/*.example.yml
+node_modules

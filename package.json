@@ -1,0 +1,29 @@
+{
+  "private": true,
+  "name": "hspec",
+  "scripts": {
+    "start": "babel-node src/index.js",
+    "build": "babel src/ --out-dir=dist/",
+    "test": "mocha --require @babel/register"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/register": "^7.9.0",
+    "mocha": "^7.1.1",
+    "power-assert": "^1.6.1",
+    "standard": "^14.3.3"
+  },
+  "dependencies": {
+    "chalk": "^4.0.0",
+    "command-line-args": "^5.1.1",
+    "debug": "^4.1.1",
+    "js-yaml": "^3.13.1",
+    "micromatch": "^4.0.2",
+    "mkdirp": "^1.0.4",
+    "prompt": "^1.0.0",
+    "variable-diff": "filp/variable-diff#master"
+  }
+}
