@@ -27,6 +27,8 @@ const args = cmd([
 ])
 
 const defaultOptions = {
+  releaseName: 'hspec-test',
+
   chartFile: 'Chart.yaml',
   hspecFile: 'hspec.yaml',
 

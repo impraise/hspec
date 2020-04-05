@@ -13,7 +13,7 @@ function valuesFilesFromOptions (options) {
 }
 
 export async function template (path, options = {}) {
-  const releaseName = options.releaseName || `hspec-${basename(path)}`
+  const releaseName = options.releaseName
   const command = `helm template ${releaseName} ${path} ${valuesFilesFromOptions(options)}`
 
   log('helm template', command)
