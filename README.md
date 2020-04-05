@@ -70,7 +70,7 @@ data:
 1 resources removed
 0 resources added
 
-prompt: Do you wish to record these changes with hspec:
+prompt: Do you wish to record these changes with hspec?:
 ```
 
 Replying `yes` automatically records the changes to the snapshot (or with the `-a` option):

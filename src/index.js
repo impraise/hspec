@@ -21,8 +21,9 @@ const abbreviationMap = {
 const log = debug('hspec')
 
 const args = cmd([
-  { name: 'chart', alias: 'c' },
-  { name: 'apply', alias: 'a', type: Boolean }
+  { name: 'chart', alias: 'c', type: String },
+  { name: 'apply', alias: 'a', type: Boolean },
+  { name: 'hspec', alias: 'f', type: String }
 ])
 
 const defaultOptions = {
@@ -34,14 +35,17 @@ const defaultOptions = {
   excludeName: []
 }
 
-async function optionsForChart(chartPath) {
+async function optionsForChart(chartPath, hspecFilePath) {
   let options = defaultOptions
-  const hspecFile = path.join(chartPath, defaultOptions.hspecFile)
+  const hspecFile = hspecFilePath ? path.resolve(hspecFilePath) : path.join(chartPath, defaultOptions.hspecFile)
+
+  log('looing for hspec file', hspecFile)
 
   // Try to load and parse the hspec file if one exists, or use
   // the default options:
   if (fs.existsSync(hspecFile)) {
     const hspec = await yaml.safeLoad(await fs.promises.readFile(hspecFile))
+    log('loaded hspec file', hspecFile)
     options = { ...options, ...hspec }
   }
 
@@ -165,7 +169,7 @@ function promptForConfirmation (resultFn) {
 
 async function main () {
   const chartPath = path.resolve(args.chart) || process.cwd()
-  const options = await optionsForChart(chartPath)
+  const options = await optionsForChart(chartPath, args.hspec)
   const hspecDir = await createHspecDirIfMissing(options)
 
   const previous = await scanDirectoryForResources(hspecDir, options)
