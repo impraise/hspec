@@ -20,18 +20,20 @@ const visualDiffOptions = {
   }
 }
 
-function dump (obj) {
-  return yaml.safeDump(obj)
-}
-
 function resourceKey (res) {
   const ns = res.metadata.namespace || 'default'
   return `${ns}.${res.apiVersion}.${res.kind}.${res.metadata.name}`
 }
 
-function listToResourceMap (list) {
+function listToResourceMap (list, options) {
   return list.reduce((map, res) => {
-    map[resourceKey(res)] = res
+    const key = resourceKey(res)
+
+    if (typeof map[key] !== 'undefined' && options.failOnDuplicateResources) {
+      throw new Error(`duplicate resource: '${key}' was already seen`)
+    }
+
+    map[key] = res
     return map
   }, {})
 }
@@ -47,9 +49,9 @@ function outputChangeset (resources, opName, color, char = '~') {
   })
 }
 
-export function compare (prev, current) {
-  const prevMap = listToResourceMap(prev)
-  const currentMap = listToResourceMap(current)
+export function compare (prev, current, options) {
+  const prevMap = listToResourceMap(prev, options)
+  const currentMap = listToResourceMap(current, options)
 
   const presenceFn = res => typeof prevMap[resourceKey(res)] !== 'undefined'
   const deletedFn = res => typeof currentMap[resourceKey(res)] === 'undefined'
@@ -68,7 +70,7 @@ export function compare (prev, current) {
     const key = resourceKey(res)
     const old = prevMap[key]
 
-    const diffResult = varDiff(old, res)
+    const diffResult = varDiff(old, res, visualDiffOptions)
 
     if (diffResult.changed) {
       internalDiffCount += 1

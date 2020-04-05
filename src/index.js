@@ -28,6 +28,7 @@ const args = cmd([
 
 const defaultOptions = {
   releaseName: 'hspec-test',
+  failOnDuplicateResources: true,
 
   chartFile: 'Chart.yaml',
   hspecFile: 'hspec.yaml',
@@ -184,7 +185,7 @@ async function main () {
     return
   }
   
-  if (compare(previous, current)) {
+  if (compare(previous, current, options)) {
     if (args.apply) {
       console.log(chalk.greenBright('accepting changes because --apply was provided'))
       await dumpResources(hspecDir, current)
