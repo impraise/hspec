@@ -8,6 +8,7 @@ import match from 'micromatch'
 import chalk from 'chalk'
 import prompt from 'prompt'
 
+import { outputError } from './output'
 import { compare } from './spec'
 import { template } from './helm'
 
@@ -23,7 +24,8 @@ const log = debug('hspec')
 const args = cmd([
   { name: 'chart', alias: 'c', type: String },
   { name: 'apply', alias: 'a', type: Boolean },
-  { name: 'hspec', alias: 'f', type: String }
+  { name: 'hspec', alias: 'f', type: String },
+  { name: 'dont-fail', type: Boolean }
 ])
 
 const defaultOptions = {
@@ -194,6 +196,8 @@ async function main () {
       promptForConfirmation(async accepted => {
         if (accepted) {
           await dumpResources(hspecDir, current)
+        } else {
+          process.exit(1)
         }
       })
     }
@@ -203,13 +207,7 @@ async function main () {
 }
 
 main().catch(err => {
-  console.log(
-    chalk.redBright(`An error occurred while running your command:\n\n`),
-    err.message,
-    chalk.grey('\n\nRun this command with DEBUG=hspec* spec for additional details\n')
-  )
-
+  outputError(err)
   log('main exception', err)
-
   process.exit(1)
 })
