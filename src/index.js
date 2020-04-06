@@ -42,7 +42,7 @@ async function optionsForChart(chartPath, hspecFilePath) {
   let options = defaultOptions
   const hspecFile = hspecFilePath ? path.resolve(hspecFilePath) : path.join(chartPath, defaultOptions.hspecFile)
 
-  log('looing for hspec file', hspecFile)
+  log('looking for hspec file', hspecFile)
 
   // Try to load and parse the hspec file if one exists, or use
   // the default options:
@@ -171,7 +171,7 @@ function promptForConfirmation (resultFn) {
 }
 
 async function main () {
-  const chartPath = path.resolve(args.chart) || process.cwd()
+  const chartPath = args.chart ? path.resolve(args.chart) : process.cwd()
   const options = await optionsForChart(chartPath, args.hspec)
   const hspecDir = await createHspecDirIfMissing(options)
 
@@ -187,7 +187,7 @@ async function main () {
   
   if (compare(previous, current, options)) {
     if (args.apply) {
-      console.log(chalk.greenBright('accepting changes because --apply was provided'))
+      console.log(chalk.greenBright('Accepting changes because --apply was provided'))
       await dumpResources(hspecDir, current)
     } else {
       promptForConfirmation(async accepted => {
@@ -201,4 +201,14 @@ async function main () {
   }
 }
 
-main()
+main().catch(err => {
+  console.log(
+    chalk.redBright(`An error occurred while running your command:\n\n`),
+    err.message,
+    chalk.grey('\n\nRun this command with DEBUG=hspec* spec for additional details\n')
+  )
+
+  log('main exception', err)
+
+  process.exit(1)
+})
