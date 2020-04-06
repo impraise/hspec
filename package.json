@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "hspec",
+  "version": "0.1.0",
   "bin": {
     "hspec": "bin/hspec"
   },
