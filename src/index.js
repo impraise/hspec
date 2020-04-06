@@ -32,6 +32,7 @@ const defaultOptions = {
 
   chartFile: 'Chart.yaml',
   hspecFile: 'hspec.yaml',
+  helmBin: 'helm',
 
   hspecDir: 'hspec',
   excludeKind: [],
