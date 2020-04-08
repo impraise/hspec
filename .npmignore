@@ -1,3 +1,5 @@
 src/
 impraise.png
 README.md
+bin/create-release
+*.tgz

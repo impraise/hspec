@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -e
+
+if [ -z "$npm_package_version" ]; then
+  echo "please run this command through 'npm run release' to ensure the correct npm_ env vars are available"
+  exit 1
+fi
+
+npm pack
+
+github-release upload \
+  --owner impraise \
+  --repo hspec \
+  --tag "v$npm_package_version" \
+  --name "v$npm_package_version" \
+  --body "Release v$npm_package_version. See CHANGELOG.md for details." \
+  hspec-$npm_package_version.tgz
