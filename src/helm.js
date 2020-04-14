@@ -12,7 +12,7 @@ function valuesFilesFromOptions (options) {
 }
 
 export async function template (path, options) {
-  const helmBin = options.helmBin || process.env.HSPEC_HELM_BIN || 'helm'
+  const helmBin = process.env.HSPEC_HELM_BIN || 'helm'
   const releaseName = options.releaseName
   const command = `${helmBin} template ${releaseName} ${path} ${valuesFilesFromOptions(options)}`
 
