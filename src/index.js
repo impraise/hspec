@@ -191,7 +191,7 @@ async function main () {
     if (args.apply) {
       console.log(chalk.greenBright('Accepting changes because --apply was provided'))
       await dumpResources(hspecDir, current)
-    } else if (process.stdout.isTTY) {
+    } else if (process.stdout.isTTY || process.env.TERM === 'dumb') {
       promptForConfirmation(async accepted => {
         if (accepted) {
           await dumpResources(hspecDir, current)
