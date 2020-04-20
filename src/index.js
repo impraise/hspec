@@ -158,10 +158,10 @@ function promptForConfirmation (resultFn) {
   prompt.get({
     properties: {
       confirmation: {
-        description: chalk.blueBright(`Do you wish to record these changes with hspec?`),
+        description: chalk.blueBright(`Do you wish to record these changes with hspec? (yes/no)`),
         type: 'string',
         pattern: /^(yes|no)$/i,
-        message: chalk.redBright('Must answer yes or no'),
+        message: chalk.redBright('You must answer yes or no'),
         required: true
       }  
     }
@@ -191,7 +191,7 @@ async function main () {
     if (args.apply) {
       console.log(chalk.greenBright('Accepting changes because --apply was provided'))
       await dumpResources(hspecDir, current)
-    } else {
+    } else if (process.stdout.isTTY) {
       promptForConfirmation(async accepted => {
         if (accepted) {
           await dumpResources(hspecDir, current)
@@ -199,6 +199,8 @@ async function main () {
           process.exit(1)
         }
       })
+    } else {
+      process.exit(1)
     }
   } else {
     console.log(chalk.greenBright('\n----------\n\nNo changes, you\'re all set!\n'))
